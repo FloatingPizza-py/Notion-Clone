@@ -2,43 +2,22 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Notion Clone</title>
+  <title>Notion Lite</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-
-  <div class="sidebar">
-    <h2>Notion Clone</h2>
-    <ul>
-      <li><a href="#" class="nav-link" data-target="Home">🏠 Home</a></li>
-      <li><a href="#" class="nav-link" data-target="About">💬 About</a></li>
-      <li><a href="#" class="nav-link" data-target="Contact">📞 Contact</a></li>
-      <li><a href="#" class="nav-link active" data-target="Notes">📄 Notes</a></li>
-    </ul>
-  </div>
-
-  <div class="main-content">
-    <div id="Home" class="section" style="display: none;">
-      <h1>Home</h1>
+  <div class="workspace">
+    <div class="sidebar">
+      <h2>🧠 Your Notes</h2>
+      <ul id="noteList"></ul>
+      <button id="newNoteBtn">➕ New Note</button>
     </div>
 
-    <div id="About" class="section" style="display: none;">
-      <h1>About</h1>
-    </div>
-
-    <div id="Contact" class="section" style="display: none;">
-      <h1>Contact</h1>
-      <h3>Email: c7440134@gmail.com</h3>
-    </div>
-
-    <div id="Notes" class="section" style="display: block;">
-      <h1>Notes</h1>
-      <div class="notion-block" contenteditable="true" spellcheck="true" id="note" aria-label="Write your notes here...">
-        <p>Delete this before writing your notes...</p>
+    <div class="main">
+      <div id="noteArea" class="note-block" contenteditable="true">
+        Start typing...
       </div>
-      <div id="notes-display"></div>
-      <button onclick="saveTextAsFile()" id="saveBtn">Save As .txt</button>
     </div>
   </div>
 

@@ -1,46 +1,44 @@
-function saveTextAsFile() {
-  const note = document.getElementById('note').innerText.trim();
-  if (!note) {
-    alert("Nothing to save!");
-    return;
-  }
+const newNoteBtn = document.getElementById('newNoteBtn');
+const noteArea = document.getElementById('noteArea');
+const noteList = document.getElementById('noteList');
 
-  const blob = new Blob([note], { type: 'text/plain' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = 'note.txt';
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
+let notes = JSON.parse(localStorage.getItem('notes')) || [];
+let activeNote = notes[0] || { title: 'Untitled', content: '' };
+
+function renderNotes() {
+  noteList.innerHTML = '';
+  notes.forEach((note, i) => {
+    const li = document.createElement('li');
+    li.textContent = note.title || `Note ${i + 1}`;
+    li.classList.toggle('active', note === activeNote);
+    li.addEventListener('click', () => switchNote(i));
+    noteList.appendChild(li);
+  });
 }
 
+function switchNote(index) {
+  activeNote = notes[index];
+  noteArea.innerHTML = activeNote.content;
+  renderNotes();
+}
 
+function saveCurrentNote() {
+  activeNote.content = noteArea.innerHTML;
+  localStorage.setItem('notes', JSON.stringify(notes));
+}
 
-document.querySelectorAll('.nav-link').forEach(link => {
-  link.addEventListener('click', (e) => {
-    e.preventDefault();
-    const targetId = link.getAttribute('data-target');
+noteArea.addEventListener('input', saveCurrentNote);
 
-    // Hide all sections
-    document.querySelectorAll('.section').forEach(sec => {
-      sec.style.display = 'none';
-    });
+newNoteBtn.addEventListener('click', () => {
+  const newNote = { title: `Note ${notes.length + 1}`, content: '' };
+  notes.push(newNote);
+  activeNote = newNote;
+  noteArea.innerHTML = '';
+  renderNotes();
+  saveCurrentNote();
+});
 
-    // Show the selected section
-    const target = document.getElementById(targetId);
-    if (target) {
-      target.style.display = 'block';
-
-      // If the notes section is shown, update its content
-      if (targetId === 'notes-section') {
-        const noteContent = document.getElementById('note').innerText;
-        const notesDisplay = document.getElementById('notes-display');
-        if (notesDisplay) {
-          notesDisplay.innerText = noteContent;
-        }
-      }
-    }
-  });
+window.addEventListener('load', () => {
+  renderNotes();
+  noteArea.innerHTML = activeNote.content || 'Start typing...';
 });
